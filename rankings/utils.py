@@ -1,5 +1,3 @@
-
-
 class IndividualRanking:
     """
     Abstract class for individual ranking

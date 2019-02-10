@@ -1,6 +1,6 @@
-from .utils import IndividualRanking
-
 import pandas as pd
+
+from .utils import IndividualRanking
 
 
 class GDPperCapita(IndividualRanking):
@@ -14,7 +14,6 @@ class GDPperCapita(IndividualRanking):
             index_col=0,
             na_values='no data',
             decimal=',')
-
 
     def get_ranking(self, year='2019'):
         return self.df_imf_gdp_per_capita[year]
