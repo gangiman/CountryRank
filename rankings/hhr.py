@@ -10,5 +10,7 @@ class HumanHappinesReport(IndividualRanking):
         self.df_human_happiness_report = pd.read_excel('Raw_Data/2018_statistical_annex_all.xlsx', header=2,
                                                        usecols='B:O')
 
-    def get_ranking(self, year='2019'):
-        return self.df_human_happiness_report
+    def get_ranking(self):
+        rk = self.df_human_happiness_report['Human Development Index (HDI) '].iloc[3:201]
+        rk = pd.to_numeric(rk, errors='coerce')
+        return rk[rk.notna()]

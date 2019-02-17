@@ -20,3 +20,4 @@ There was a original version, but it was lost due to accidentally killed contain
 2) IMF GDP per Capita [source](https://www.imf.org/external/datamapper/NGDPDPC@WEO/OEMDC/ADVEC/WEOWORLD), [data](./Raw_Data/imf-dm-export-20181120.csv)
 3) MIPEX Immigrant Integration ranking 2015 [source](http://mipex.eu), [data](./Raw_Data/policy_indicators_finalwebsite.xlsx)
 4) Human development report [source](http://hdr.undp.org/en/data), [data](./Raw_Data/2018_statistical_annex_all.xlsx)
+5) Freedom of the Internet report 2018 [source](https://freedomhouse.org/sites/default/files/FOTN_2018_Final%20Booklet_11_1_2018.pdf), [data](./Raw_Data/FOTN_2018_Final_Booklet_11_1_2018_global_ranking.csv)

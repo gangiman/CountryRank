@@ -16,4 +16,4 @@ class GDPperCapita(IndividualRanking):
             decimal=',')
 
     def get_ranking(self, year='2019'):
-        return self.df_imf_gdp_per_capita[year]
+        return self.df_imf_gdp_per_capita[year].iloc[:193]
