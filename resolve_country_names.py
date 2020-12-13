@@ -6,6 +6,7 @@ import pandas as pd
 
 API_ENDPOINT = "https://www.wikidata.org/w/api.php"
 
+
 def get_data(query):
 # query = "wikipedia"
     params = {
@@ -14,7 +15,7 @@ def get_data(query):
         'language': 'en',
         'search': query
     }
-    r = requests.get(API_ENDPOINT, params = params)
+    r = requests.get(API_ENDPOINT, params=params)
 #     print(r.json()['search'][0])
     return r.json()['search'][0]['id']
 
@@ -34,12 +35,7 @@ def convert_to_iso_codes(series: pd.Series):
             # not_found_countries.append(_value)
 
 
-
 def get_country_code_from_wikidata(client, country):
     data = get_data(country)
     cv = client.get(data)
     return pycountry.countries.get(alpha_3=cv.attributes['claims']['P298'][0]['mainsnak']['datavalue']['value'])
-
-
-
-
