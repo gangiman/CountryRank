@@ -7,8 +7,8 @@ class DoingBuisnessReview(IndividualRanking):
     higher_is_better = False
 
     def __init__(self):
-        # TODO: fix exclx reading 
-        self.df = pd.read_excel('Raw_Data/Doing_buisness_16_12_2020.xlsx', engine="openpyxl", index_col="Economy")
+        self.series = pd.read_csv('./Raw_Data/Doing_buisness_16_12_2020.csv', delimiter=';', index_col=0
+                                  ).globalRank.dropna().astype(int)
 
     def get_ranking(self):
-        pass
+        return self.series
