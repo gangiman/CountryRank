@@ -1,5 +1,6 @@
 import pandas as pd
 from sklearn import preprocessing
+from numpy import linalg as LA
 
 class IndividualRanking:
     """
@@ -20,7 +21,8 @@ class IndividualRanking:
     def get_norm_ranking(self) -> pd.Series:
         ranking = self.get_ranking()
         # normalazing ranking
-        # as.numpy(ranking)
         min_max_scaler = preprocessing.MinMaxScaler()
-        x_scaled = min_max_scaler.fit_transform(ranking.to_numpy().reshape(1,-1))
-        return pd.Series(x_scaled[0], index=ranking.index)
+        x_scaled = min_max_scaler.fit_transform(ranking.to_numpy().reshape(-1,1))
+        x_scaled.reshape(1, -1)
+        x_scaled = LA.norm(x_scaled, axis=1)
+        return pd.Series(x_scaled, index=ranking.index)
