@@ -6,6 +6,7 @@ import pycountry
 
 
 API_ENDPOINT = "https://www.wikidata.org/w/api.php"
+client = Client()
 
 
 def get_data(query):
@@ -16,14 +17,35 @@ def get_data(query):
         'search': query
     }
     r = requests.get(API_ENDPOINT, params=params)
-#     print(r.json()['search'][0])
     return r.json()['search'][0]['id']
 
 
-def get_country_code_from_wikidata(client, country):
+def get_country_code_from_wikidata(country):
     data = get_data(country)
     cv = client.get(data)
     return pycountry.countries.get(alpha_3=cv.attributes['claims']['P298'][0]['mainsnak']['datavalue']['value'])
+
+
+def identity(country: str) -> str:
+    return country
+
+
+def take_first(country: str) -> str:
+    return country.split(',')[0]
+
+
+def reverse_parts(country: str) -> str:
+    return ' '.join(country.split(',')[::-1])
+
+
+def resolve_country(_country_query):
+    for _method in [pycountry.countries.lookup, get_country_code_from_wikidata]:
+        for _fixing_country_string_method in [identity, take_first, reverse_parts]:
+            try:
+                _country = _method(_fixing_country_string_method(_country_query))
+                return _country
+            except (LookupError, IndexError):
+                continue
 
 
 class IndividualRanking:
@@ -54,12 +76,8 @@ class IndividualRanking:
     def resolve_countries_to_iso_codes(self) -> pd.Series:
         series = self.get_norm_ranking()
         countries = []
-        client = Client()
         for _value in series.index:
-            try:
-                _country = pycountry.countries.lookup(_value)
-                countries.append(_country)
-            except LookupError:
-                countries.append(get_country_code_from_wikidata(client, _value))
+            _country = resolve_country(_value)
+            countries.append(_country)
         series.index = pd.Index(countries)
         return series
