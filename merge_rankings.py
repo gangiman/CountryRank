@@ -1,6 +1,7 @@
 from rankings import list_of_all_rankings
 import numpy as np
 
+
 def print_all_rankings(weights='equal'):
     if weights == 'equal':
         num_classes = len(list_of_all_rankings)
@@ -17,8 +18,10 @@ def print_all_rankings(weights='equal'):
         print("Maximum value is {}, for country {}".format(ranking.max(), ranking.idxmax()))
         print("Minimum value is {}, for country {}".format(ranking.min(), ranking.idxmin()))        
 
+
 def main():
     print_all_rankings()    
+
 
 if __name__ == '__main__':
     main()
