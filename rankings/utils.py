@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn import preprocessing
-from numpy import linalg as LA
+
 
 class IndividualRanking:
     """
@@ -19,10 +19,10 @@ class IndividualRanking:
         raise NotImplementedError()
 
     def get_norm_ranking(self) -> pd.Series:
+        """
+        This method returns ranking pd.Series unified to [0,1] range.
+        """
         ranking = self.get_ranking()
-        # normalazing ranking
         min_max_scaler = preprocessing.MinMaxScaler()
-        x_scaled = min_max_scaler.fit_transform(ranking.to_numpy().reshape(-1,1))
-        x_scaled.reshape(1, -1)
-        x_scaled = LA.norm(x_scaled, axis=1)
-        return pd.Series(x_scaled, index=ranking.index)
+        x_scaled = min_max_scaler.fit_transform(ranking.to_numpy().reshape(-1, 1))
+        return pd.Series(x_scaled.T[0], index=ranking.index)

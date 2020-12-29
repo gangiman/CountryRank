@@ -4,3 +4,4 @@ wikidata
 requests
 pycountry
 openpyxl
+scikit-learn
