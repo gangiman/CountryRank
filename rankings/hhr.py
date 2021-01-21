@@ -7,11 +7,12 @@ class HumanHappinesReport(IndividualRanking):
     higher_is_better = True
 
     def __init__(self):
-        self.df_human_happiness_report = pd.read_excel(
+        self.df_hhr = pd.read_excel(
             'Raw_Data/2018_statistical_annex_all.xlsx',
-            header=2, usecols='B:O', engine='openpyxl')
+            header=3, usecols='A:C', engine='openpyxl', index_col=0)
 
     def get_ranking(self):
-        rk = self.df_human_happiness_report['Human Development Index (HDI) '].iloc[3:201]
-        rk = pd.to_numeric(rk, errors='coerce')
-        return rk[rk.notna()]
+        index_numeric = pd.to_numeric(self.df_hhr.index, errors='coerce')
+        df_hhr = self.df_hhr[index_numeric.notnull()]
+        df_hhr = df_hhr.set_index('Country').Value
+        return df_hhr

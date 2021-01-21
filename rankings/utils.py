@@ -3,6 +3,7 @@ from sklearn import preprocessing
 from wikidata.client import Client
 import requests
 import pycountry
+import warnings
 
 
 API_ENDPOINT = "https://www.wikidata.org/w/api.php"
@@ -34,13 +35,17 @@ def take_first(country: str) -> str:
     return country.split(',')[0]
 
 
+def take_first_ws(country: str) -> str:
+    return country.split(' ')[0]
+
+
 def reverse_parts(country: str) -> str:
     return ' '.join(country.split(',')[::-1])
 
 
 def resolve_country(_country_query):
     for _method in [pycountry.countries.lookup, get_country_code_from_wikidata]:
-        for _fixing_country_string_method in [identity, take_first, reverse_parts]:
+        for _fixing_country_string_method in [identity, take_first, take_first_ws, reverse_parts]:
             try:
                 _country = _method(_fixing_country_string_method(_country_query))
                 return _country
@@ -78,6 +83,10 @@ class IndividualRanking:
         countries = []
         for _value in series.index:
             _country = resolve_country(_value)
-            countries.append(_country)
+            if _country is None:
+                warnings.warn(f"Couldn't resolve the country '{_value}'! Using 'N/A'.")
+                countries.append('N/A')
+            else:
+                countries.append(_country.alpha_3)
         series.index = pd.Index(countries)
         return series

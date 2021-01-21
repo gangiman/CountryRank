@@ -1,5 +1,14 @@
 from rankings import list_of_all_rankings
 import numpy as np
+import pandas as pd
+
+
+def get_ranking_df():
+    series = {}
+    for _class in list_of_all_rankings:
+        data_source = _class()
+        series[_class.__name__] = data_source.resolve_countries_to_iso_codes()
+    return pd.DataFrame(series)
 
 
 def print_all_rankings(weights='equal'):
@@ -20,7 +29,8 @@ def print_all_rankings(weights='equal'):
 
 
 def main():
-    print_all_rankings()    
+    df = get_ranking_df()
+    print(df.describe())
 
 
 if __name__ == '__main__':
