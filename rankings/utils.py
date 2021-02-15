@@ -73,20 +73,18 @@ class IndividualRanking:
         """
         This method returns ranking pd.Series unified to [0,1] range.
         """
-        ranking = self.get_ranking()
+        ranking = self.resolve_countries()
         min_max_scaler = preprocessing.MinMaxScaler()
         x_scaled = min_max_scaler.fit_transform(ranking.to_numpy().reshape(-1, 1))
         return pd.Series(x_scaled.T[0], index=ranking.index)
 
-    def resolve_countries_to_iso_codes(self) -> pd.Series:
-        series = self.get_norm_ranking()
-        countries = []
-        for _value in series.index:
-            _country = resolve_country(_value)
+    def resolve_countries(self) -> pd.Series:
+        series = self.get_ranking()
+        countries = {}
+        for _index, _value in series.items():
+            _country = resolve_country(_index)
             if _country is None:
-                warnings.warn(f"Couldn't resolve the country '{_value}'! Using 'N/A'.")
-                countries.append('N/A')
+                warnings.warn(f"Couldn't resolve the country '{_index}'! Using 'N/A'.")
             else:
-                countries.append(_country.alpha_3)
-        series.index = pd.Index(countries)
-        return series
+                countries[_country.alpha_3] = _value
+        return pd.Series(countries)

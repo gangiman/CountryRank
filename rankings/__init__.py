@@ -9,5 +9,5 @@ list_of_all_rankings = [
     HumanHappinesReport,
     MIPEX,
     FreedomOfInternetReport,
-    DoingBuisnessReview    
+    DoingBuisnessReview
 ]

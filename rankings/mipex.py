@@ -1,4 +1,6 @@
 import pandas as pd
+import pycountry
+import warnings
 
 from .utils import IndividualRanking
 
@@ -13,3 +15,19 @@ class MIPEX(IndividualRanking):
 
     def get_ranking(self, year='2019'):
         return self.df['Overall Score (10-14)']
+
+    def resolve_countries(self) -> pd.Series:
+        series = self.get_ranking()
+        countries = {}
+        for _index, _value in series.items():
+            if _index == 'UK':
+                _index = 'GB'
+            try:
+                _country = pycountry.countries.get(alpha_2=_index)
+            except LookupError:
+                _country = None
+            if _country is None:
+                warnings.warn(f"Couldn't resolve the country '{_index}'! Using 'N/A'.")
+            else:
+                countries[_country.alpha_3] = _value
+        return pd.Series(countries)

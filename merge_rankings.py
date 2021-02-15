@@ -3,11 +3,11 @@ import numpy as np
 import pandas as pd
 
 
-def get_ranking_df():
+def get_ranking_df() -> pd.DataFrame:
     series = {}
     for _class in list_of_all_rankings:
         data_source = _class()
-        series[_class.__name__] = data_source.resolve_countries_to_iso_codes()
+        series[_class.__name__] = data_source.get_norm_ranking()
     return pd.DataFrame(series)
 
 
@@ -30,6 +30,7 @@ def print_all_rankings(weights='equal'):
 
 def main():
     df = get_ranking_df()
+    df.to_csv('score_dump_v1.csv')
     print(df.describe())
 
 
