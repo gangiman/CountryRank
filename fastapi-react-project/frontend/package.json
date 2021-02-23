@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/lab": "^4.0.0-alpha.54",
+    "jwt-decode": "^3.0.0",
+    "lodash.isequalwith": "^4.4.0",
     "ra-data-json-server": "^3.5.2",
     "ra-data-simple-rest": "^3.3.2",
     "react": "^16.13.1",
@@ -11,9 +14,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.3",
     "react-truncate": "^2.4.0",
-    "standard": "^14.3.3",
-    "jwt-decode": "^3.0.0",
-    "@material-ui/lab": "^4.0.0-alpha.54"
+    "standard": "^14.3.3"
   },
   "scripts": {
     "start": "react-scripts start",
