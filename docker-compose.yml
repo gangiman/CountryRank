@@ -29,7 +29,7 @@ services:
   worker:
     build:
       context: backend
-      dockerfile: Dockerfile
+      dockerfile: backend/Dockerfile
     command: celery --app app.tasks worker --loglevel=DEBUG -Q main-queue -c 1
 
   flower:  
@@ -43,7 +43,7 @@ services:
   backend:
     build:
       context: backend
-      dockerfile: Dockerfile
+      dockerfile: backend/Dockerfile
     command: python app/main.py
     tty: true
     volumes:
@@ -58,7 +58,7 @@ services:
   frontend:
     build:
       context: frontend
-      dockerfile: Dockerfile
+      dockerfile: frontend/Dockerfile
     stdin_open: true
     volumes:
       - './frontend:/app:cached'

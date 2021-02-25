@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import date
 import typing as t
 
 
@@ -43,3 +44,13 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     email: str = None
     permissions: str = "user"
+
+
+class Ranking(BaseModel):
+    id: int
+    created_date: date
+    ranking: str
+    number_of_countries: int
+    source: str
+    user_id: int
+    # user = relationship('User', backref='clients')
