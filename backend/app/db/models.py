@@ -18,7 +18,7 @@ class User(Base):
 
 
 class Ranking(Base):
-    __tablename__ = "Ranking"
+    __tablename__ = "ranking"
 
     id = Column(Integer, primary_key=True, index=True)
     created_date = Column(Date)
