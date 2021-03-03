@@ -11,6 +11,15 @@ def get_ranking_df() -> pd.DataFrame:
     return pd.DataFrame(series)
 
 
+def get_ranking_for_weights(weights: dict) -> pd.Series:
+    """
+    Given a map of weights returns a series of countries with personal scores.
+    :param weights: - maps ranking_ids to weights, weights have to sum to 1.0
+    :return: Series
+    """
+    assert sum(weights.values()) == 1.0
+
+
 def print_all_rankings(weights='equal'):
     if weights == 'equal':
         num_classes = len(list_of_all_rankings)
