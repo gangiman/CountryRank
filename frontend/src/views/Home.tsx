@@ -44,8 +44,8 @@ export const Home: FC = () => {
       <a className={classes.link} href="/admin">
         Admin Dashboard
       </a>
-      <a className={classes.link} href="/protected">
-        Protected Route
+      <a className={classes.link} href="/questionnaire">
+        Go to questionnaire
       </a>
       {isAuthenticated() ? (
         <a className={classes.link} href="/logout">
