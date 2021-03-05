@@ -8,6 +8,14 @@ from app.core import config
 from app.db.session import SessionLocal
 from app.core.auth import get_current_active_user
 from app.core.celery_app import celery_app
+from pydantic import BaseModel
+from typing import List
+
+
+class CountryData(BaseModel):
+    priority: str
+    languages: List[str]
+
 
 app = FastAPI(
     title=config.PROJECT_NAME, docs_url="/api/docs", openapi_url="/api"
@@ -30,9 +38,14 @@ async def root():
 @app.get("/api/v1/task")
 async def example_task():
     celery_app.send_task("app.tasks.example_task", args=["Hello World"])
-
     return {"message": "success"}
 
+
+@app.post("/api/v1/country")
+async def getCountryParameters(data: CountryData):
+    print(f">>>>> Prority tag is: {data.priority}")
+    print(f">>>>> Languages are: {data.languages}")
+    return {"message": "Server has recieved the parameters"}
 
 # Routers
 app.include_router(

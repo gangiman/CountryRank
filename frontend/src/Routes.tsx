@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Home, Login, SignUp, Protected, PrivateRoute } from './views';
 import { Admin } from './admin';
 import { logout } from './utils/auth';
+import { Questionnaire } from './views/Questionnaire';
 
 const useStyles = makeStyles((theme) => ({
   app: {
@@ -46,6 +47,7 @@ export const Routes: FC = () => {
             }}
           />
           <PrivateRoute path="/protected" component={Protected} />
+          <PrivateRoute path="/questionnaire" component={Questionnaire} />
           <Route exact path="/" component={Home} />
         </header>
       </div>
