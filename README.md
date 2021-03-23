@@ -1,5 +1,7 @@
 # CountryRank
 
+[Slides explaining roadmap.](https://docs.google.com/presentation/d/1he0vFWSKci07okjCnfs1KLewyGTssm5IVZCtJUmSPP8/edit?usp=sharing)
+
 Simple project that given your preferences for different country attributes returns a ranked list of countries.
 
 The original design was:
