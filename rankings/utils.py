@@ -10,6 +10,26 @@ API_ENDPOINT = "https://www.wikidata.org/w/api.php"
 client = Client()
 
 
+def get_norm_ranking(ranking: pd.Series) -> pd.Series:
+    """
+    This method returns ranking pd.Series unified to [0,1] range.
+    """
+    min_max_scaler = preprocessing.MinMaxScaler()
+    x_scaled = min_max_scaler.fit_transform(ranking.to_numpy().reshape(-1, 1))
+    return pd.Series(x_scaled.T[0], index=ranking.index)
+
+
+def resolve_countries(series: pd.Series) -> pd.Series:
+    countries = {}
+    for _index, _value in series.items():
+        _country = resolve_country(_index)
+        if _country is None:
+            warnings.warn(f"Couldn't resolve the country '{_index}'! Using 'N/A'.")
+        else:
+            countries[_country.alpha_3] = _value
+    return pd.Series(countries)
+
+
 def get_data(query):
     params = {
         'action': 'wbsearchentities',
@@ -24,7 +44,9 @@ def get_data(query):
 def get_country_code_from_wikidata(country):
     data = get_data(country)
     cv = client.get(data)
-    return pycountry.countries.get(alpha_3=cv.attributes['claims']['P298'][0]['mainsnak']['datavalue']['value'])
+    return pycountry.countries.get(
+        alpha_3=cv.attributes['claims']['P298'][0]
+        ['mainsnak']['datavalue']['value'])
 
 
 def identity(country: str) -> str:
@@ -53,38 +75,17 @@ def resolve_country(_country_query):
                 continue
 
 
-class IndividualRanking:
-    """
-    Abstract class for individual ranking
-    """
-
-    @property
-    def higher_is_better(self):
-        """
-
-        :return: bool
-        """
-        return NotImplementedError()
-
-    def get_ranking(self):
-        raise NotImplementedError()
-
-    def get_norm_ranking(self) -> pd.Series:
-        """
-        This method returns ranking pd.Series unified to [0,1] range.
-        """
-        ranking = self.resolve_countries()
-        min_max_scaler = preprocessing.MinMaxScaler()
-        x_scaled = min_max_scaler.fit_transform(ranking.to_numpy().reshape(-1, 1))
-        return pd.Series(x_scaled.T[0], index=ranking.index)
-
-    def resolve_countries(self) -> pd.Series:
-        series = self.get_ranking()
-        countries = {}
-        for _index, _value in series.items():
-            _country = resolve_country(_index)
-            if _country is None:
-                warnings.warn(f"Couldn't resolve the country '{_index}'! Using 'N/A'.")
-            else:
-                countries[_country.alpha_3] = _value
-        return pd.Series(countries)
+def resolve_countries_from_alpha_2(series: pd.Series) -> pd.Series:
+    countries = {}
+    for _index, _value in series.items():
+        if _index == 'UK':
+            _index = 'GB'
+        try:
+            _country = pycountry.countries.get(alpha_2=_index)
+        except LookupError:
+            _country = None
+        if _country is None:
+            warnings.warn(f"Couldn't resolve the country '{_index}'! Using 'N/A'.")
+        else:
+            countries[_country.alpha_3] = _value
+    return pd.Series(countries)
