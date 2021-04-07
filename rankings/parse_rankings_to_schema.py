@@ -48,7 +48,7 @@ def GDPperCapita():
         index_col=0,
         na_values='no data',
         decimal=',')
-    series = df_imf_gdp_per_capita[2019].iloc[:193]
+    series = df_imf_gdp_per_capita['2019'].iloc[:193]
     return {
         'higher_is_better': True,
         'ranking': series
@@ -65,7 +65,7 @@ def MIPEX():
     }
 
 
-def PassportIndex(hold_passports=('Russian Federation',), wights_to_countries: Optional[Dict]=None):
+def PassportIndex(hold_passports=('RUS',), wights_to_countries: Optional[Dict]=None):
     df = pd.read_csv('./Raw_Data/passport-index-ISO-alpha-3.csv', header=0, index_col=0)
     new_df = reduce(or_, [(df.loc[_country] > 0) for _country in hold_passports], (df > 0))
     #TODO: add weighting by countries
@@ -86,13 +86,15 @@ list_of_all_rankings = [
 
 
 def main():
-    output = [
-        {'name': _ranking.__name__, **_ranking()}
-        for _ranking in list_of_all_rankings
-    ]
+    
+    output = []
+    for _ranking in list_of_all_rankings:
+        ranking_dict = {'name': _ranking.__name__, **_ranking()}
+        ranking_dict['ranking'] = list(ranking_dict['ranking'].iteritems())
+
     with open('joined_init_rankings.json', 'w+') as fh:
         fh.write(json.dumps(output))
-
+    print('done')
 
 if __name__ == '__main__':
     main()
