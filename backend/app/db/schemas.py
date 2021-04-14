@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from datetime import date
-import typing as t
+from typing import Optional
 
 
 class UserBase(BaseModel):
@@ -23,7 +23,7 @@ class UserCreate(UserBase):
 
 
 class UserEdit(UserBase):
-    password: t.Optional[str] = None
+    password: Optional[str] = None
 
     class Config:
         orm_mode = True
@@ -46,11 +46,18 @@ class TokenData(BaseModel):
     permissions: str = "user"
 
 
-class Ranking(BaseModel):
-    id: int
+class RankingBase(BaseModel):
+    name: str
     created_date: date
     ranking: str
     number_of_countries: int
     source: str
     user_id: int
     # user = relationship('User', backref='clients')
+
+
+class Ranking(RankingBase):
+    id: int
+
+    class Config:
+        orm_mode = True

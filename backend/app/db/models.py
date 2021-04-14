@@ -21,6 +21,7 @@ class Ranking(Base):
     __tablename__ = "ranking"
 
     id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
     created_date = Column(Date)
     ranking = Column(JSON)
     number_of_countries = Column(Integer)

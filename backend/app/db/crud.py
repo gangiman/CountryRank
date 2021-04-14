@@ -2,6 +2,9 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 import typing as t
 
+from datetime import date
+import json
+
 from . import models, schemas
 from app.core.security import get_password_hash
 
@@ -37,6 +40,22 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+
+def create_rankings(db: Session, ranking_object: schemas.RankingBase, user_id: int):
+    db_user = get_user(db, user_id)
+    ranking = models.Ranking(
+        name=ranking_object.name,
+        created_date=ranking_object.created_date,
+        ranking=json.dumps(ranking_object.ranking),
+        number_of_countries=ranking_object.number_of_countries,
+        source=ranking_object.source,
+        user_id=db_user.id
+    )
+    db.add(ranking)
+    db.commit()
+    db.refresh(ranking)
+    return ranking
 
 
 def delete_user(db: Session, user_id: int):
